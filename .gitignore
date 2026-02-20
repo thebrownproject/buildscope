@@ -21,6 +21,9 @@ ingestion/pdfs/
 bin/
 obj/
 
+# Config (may contain API keys)
+config.json
+
 # OS
 .DS_Store
 Thumbs.db
