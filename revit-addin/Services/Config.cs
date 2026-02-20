@@ -18,9 +18,12 @@ namespace BuildScope
             if (_supabaseUrl != null)
                 return _supabaseUrl;
 
-            _supabaseUrl = Environment.GetEnvironmentVariable("BUILDSCOPE_SUPABASE_URL");
-            if (!string.IsNullOrEmpty(_supabaseUrl))
+            var envUrl = Environment.GetEnvironmentVariable("BUILDSCOPE_SUPABASE_URL");
+            if (!string.IsNullOrEmpty(envUrl))
+            {
+                _supabaseUrl = envUrl;
                 return _supabaseUrl;
+            }
 
             LoadFromFile();
             return _supabaseUrl;
@@ -31,9 +34,12 @@ namespace BuildScope
             if (_apiKey != null)
                 return _apiKey;
 
-            _apiKey = Environment.GetEnvironmentVariable("BUILDSCOPE_API_KEY");
-            if (!string.IsNullOrEmpty(_apiKey))
+            var envKey = Environment.GetEnvironmentVariable("BUILDSCOPE_API_KEY");
+            if (!string.IsNullOrEmpty(envKey))
+            {
+                _apiKey = envKey;
                 return _apiKey;
+            }
 
             LoadFromFile();
             return _apiKey;

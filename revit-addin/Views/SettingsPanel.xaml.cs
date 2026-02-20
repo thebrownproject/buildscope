@@ -17,13 +17,13 @@ namespace BuildScope.Views
         private void LoadConfig()
         {
             UrlInput.Text = Config.GetSupabaseUrl() ?? "";
-            KeyInput.Text = Config.GetApiKey() ?? "";
+            KeyInput.Password = Config.GetApiKey() ?? "";
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             var url = UrlInput.Text.Trim();
-            var key = KeyInput.Text.Trim();
+            var key = KeyInput.Password.Trim();
 
             Config.Save(url, key);
 

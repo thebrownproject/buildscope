@@ -44,14 +44,9 @@ namespace BuildScope.Views
         {
             var projects = _projectManager.ListProjects();
             if (projects.Count > 0)
-            {
                 _projectManager.SetCurrentProject(projects[0]);
-                NavigateToChat();
-            }
-            else
-            {
-                NavigateToChat();
-            }
+
+            NavigateToChat();
         }
     }
 }

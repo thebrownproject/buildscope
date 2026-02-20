@@ -76,7 +76,16 @@ namespace BuildScope
         public void SetCurrentProject(ProjectContext? project) =>
             CurrentProject = project;
 
-        private string GetProjectPath(string name) =>
-            Path.Combine(_projectsDir, $"{name}.json");
+        private string GetProjectPath(string name)
+        {
+            var sanitized = string.Concat(name.Select(c =>
+                Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));
+            var fullPath = Path.GetFullPath(Path.Combine(_projectsDir, $"{sanitized}.json"));
+
+            if (!fullPath.StartsWith(Path.GetFullPath(_projectsDir)))
+                throw new ArgumentException("Invalid project name.");
+
+            return fullPath;
+        }
     }
 }
