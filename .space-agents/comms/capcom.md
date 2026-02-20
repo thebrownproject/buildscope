@@ -90,3 +90,72 @@ Start Phase 2: Revit add-in tasks (1.4-1.7) on Mac. Write all C# code, defer bui
 
 ---
 
+## [2026-02-20 20:30] Session 3
+
+**Branch:** main | **Git:** clean
+
+### What Happened
+Orchestrated execution of all 4 Revit add-in tasks (1.4-1.7), plus design upgrade, code review, rename, and Volume 1 ingestion. Massive session.
+
+1. **Task 1.4 - Scaffold Revit add-in** (Inspector: 5/5 PASS)
+   - Created `revit-addin/` with BuildSpec.sln, .csproj, .addin, App.cs, ChatPanel.xaml/.cs
+   - Ported IExternalApplication, IDockablePaneProvider, ribbon tab from Archie Copilot
+   - Stripped IronPython, unique GUIDs, correct BuildSpec namespace
+
+2. **Task 1.5 - Models & services** (Inspector: 6/6 PASS)
+   - ChatMessage.cs (INotifyPropertyChanged), ProjectContext.cs ([JsonProperty] for snake_case)
+   - Config.cs (env var + config.json fallback), BuildSpecService.cs (HTTP client matching Edge Function contract)
+   - ProjectManager.cs (file-based CRUD in AppData), 27 unit tests
+
+3. **Task 1.6 - All views** (Inspector: 8/8 PASS)
+   - ChatPanel.xaml/.cs: full chat UI, ChatMessageTemplateSelector, markdown rendering via MarkdownParser.cs, references footer, project dropdown
+   - ProjectForm.xaml/.cs: building class/state/type dropdowns, validation
+   - SettingsPanel.xaml/.cs: Supabase URL + API key config
+   - MainPanel.xaml/.cs: IDockablePaneProvider host with ContentControl navigation
+   - 9 MarkdownParser unit tests
+
+4. **Task 1.7 - Wire up chat flow** (Inspector: 7/7 PASS)
+   - ChatSessionManager.cs: per-project Dictionary<string, List<ChatMessage>>, 20-message FIFO cap, last-10 API history
+   - Wired into ChatPanel: save/restore on project switch, enforce cap after each response
+   - 11 unit tests. Total: 47/47 passing
+
+5. **Design upgrade** - Rewrote all 4 XAML views from dark theme to warm light theme inspired by user's reference images at ~/Downloads/inspiration/. Palette: cream background (#F5F1EB), sage green accent (#2B4D3F), white cards, pill buttons (20px radius), bold editorial typography. Updated code-behind hardcoded colors.
+
+6. **Code review** - Full quality review by subagent. Found 2 critical (Config caching bug, ProjectManager path traversal), 5 warnings. Fixed 5 of 9 issues: Config empty env var bug, path sanitization, .sln missing test project, PasswordBox for API key, simplified MainPanel branching.
+
+7. **Rename BuildScope -> BuildSpec** - Full refactor across 24 files, 6 file renames. Zero "BuildScope" references remaining. GitHub repo renamed via `gh repo rename buildspec`.
+
+8. **README rewrite** - Stripped to portfolio-first format matching archie-copilot style. Removed project structure tree, env vars, setup details. Added Class 2 fire resistance example.
+
+9. **Feature closed** - buildscope-tde.1 (BuildSpec POC) closed with all 7 tasks complete.
+
+10. **Volume 1 ingestion** (buildscope-tde.2, in progress)
+    - Updated `ingestion/ingest.py` with `--volume` and `--skip` CLI args for multi-volume support
+    - Ingested 1,248 / 1,407 Volume 1 chunks before hitting Gemini free tier daily cap (1,000 embed requests)
+    - All 1,248 uploaded chunks verified: volume=1, applicable_classes=[2,3,4,5,6,7,8,9], embeddings present
+
+### Decisions Made
+- Renamed BuildScope -> BuildSpec (user preference, "spec" maps better to compliance/specifications domain)
+- Warm light theme over dark (cream/sage green, inspired by user's reference images -- editorial, architectural feel)
+- README targets employers, not contributors -- portfolio-first format
+- Class 2 Victoria fire resistance as the README example query
+- Volume 1 ingestion to complete NCC coverage (classes 2-9)
+
+### Gotchas
+- Gemini free tier embedding quota: 1,000 requests/day per model per project. Burns through fast when ingesting 1,400 chunks (71 batches of 20). Resets at midnight Pacific.
+- Config.cs caching bug: empty env var "" assigned to field, then `??=` in LoadFromFile() skips it (not null, just empty). Fix: only cache non-empty values.
+- WPF PasswordBox has no Style/Template support like TextBox -- had to inline the styling properties directly on the element.
+
+### In Progress
+- **buildscope-tde.2**: 159 chunks remaining for Volume 1 ingestion. Blocked by Gemini daily quota.
+
+### Next Action
+**FIRST THING next session:** Finish Volume 1 ingestion (8 API calls, ~2 minutes):
+```bash
+cd ingestion && source .venv/bin/activate
+python ingest.py /Users/fraserbrown/Downloads/ncc2022-volume-one.pdf --volume 1 --skip 1248
+```
+Then close buildscope-tde.2. After that: build on Windows with Revit 2025 and record demo video.
+
+---
+
