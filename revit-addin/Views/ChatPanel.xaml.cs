@@ -35,6 +35,7 @@ namespace BuildScope.Views
     {
         private readonly MainPanel _mainPanel;
         private readonly ProjectManager _projectManager;
+        private readonly ChatSessionManager _sessionManager = new();
         private readonly ObservableCollection<ChatMessage> _messages = new();
         private bool _isProcessing;
         private bool _suppressDropdownEvent;
@@ -104,10 +105,19 @@ namespace BuildScope.Views
             if (_projectManager.CurrentProject == null)
             {
                 _messages.Add(new ChatMessage { Type = MessageType.Welcome });
+                return;
+            }
+
+            var project = _projectManager.CurrentProject;
+            var saved = _sessionManager.LoadChat(project.Name);
+
+            if (saved.Count > 0)
+            {
+                foreach (var msg in saved)
+                    _messages.Add(msg);
             }
             else
             {
-                var project = _projectManager.CurrentProject;
                 _messages.Add(new ChatMessage
                 {
                     Type = MessageType.Assistant,
@@ -129,9 +139,16 @@ namespace BuildScope.Views
 
             if (ProjectDropdown.SelectedItem is ProjectContext selected)
             {
+                SaveCurrentChat();
                 _projectManager.SetCurrentProject(selected);
                 ShowWelcomeOrChat();
             }
+        }
+
+        private void SaveCurrentChat()
+        {
+            if (_projectManager.CurrentProject == null) return;
+            _sessionManager.SaveChat(_projectManager.CurrentProject.Name, _messages.ToList());
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
@@ -206,9 +223,7 @@ namespace BuildScope.Views
                 }
 
                 var service = new BuildScopeService(url, key);
-                var history = _messages
-                    .Where(m => m.Type is MessageType.User or MessageType.Assistant)
-                    .ToList();
+                var history = _sessionManager.GetHistoryForApi(_messages.ToList());
 
                 var response = await Task.Run(() =>
                     service.QueryAsync(input, _projectManager.CurrentProject, history));
@@ -221,6 +236,16 @@ namespace BuildScope.Views
                     Content = response.Answer,
                     References = response.References
                 });
+
+                var asList = _messages.ToList();
+                _sessionManager.EnforceMessageCap(asList);
+                if (asList.Count < _messages.Count)
+                {
+                    _messages.Clear();
+                    foreach (var m in asList) _messages.Add(m);
+                }
+
+                SaveCurrentChat();
             }
             catch (Exception ex)
             {
@@ -254,7 +279,7 @@ namespace BuildScope.Views
                 {
                     TextWrapping = TextWrapping.Wrap,
                     FontFamily = new FontFamily("Segoe UI"),
-                    Foreground = new SolidColorBrush(Color.FromRgb(0xEA, 0xEA, 0xEC)),
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x1A, 0x1A)),
                     LineHeight = 20
                 };
 
@@ -269,7 +294,7 @@ namespace BuildScope.Views
                         tb.Margin = new Thickness(12, 2, 0, 2);
                         tb.Inlines.Add(new Run("\u2022  ")
                         {
-                            Foreground = new SolidColorBrush(Color.FromRgb(0xD4, 0x94, 0x4C))
+                            Foreground = new SolidColorBrush(Color.FromRgb(0x2B, 0x4D, 0x3F))
                         });
                         tb.FontSize = 13.5;
                         break;
@@ -306,7 +331,7 @@ namespace BuildScope.Views
             panel.Children.Add(new Border
             {
                 Height = 1,
-                Background = new SolidColorBrush(Color.FromRgb(0x3A, 0x3A, 0x42)),
+                Background = new SolidColorBrush(Color.FromRgb(0xE2, 0xDD, 0xD6)),
                 Margin = new Thickness(0, 10, 0, 8)
             });
 
@@ -314,7 +339,7 @@ namespace BuildScope.Views
             panel.Children.Add(new TextBlock
             {
                 Text = "References:",
-                Foreground = new SolidColorBrush(Color.FromRgb(0x8E, 0x8E, 0x96)),
+                Foreground = new SolidColorBrush(Color.FromRgb(0x6B, 0x6B, 0x6B)),
                 FontSize = 11,
                 FontWeight = FontWeights.SemiBold,
                 FontFamily = new FontFamily("Segoe UI"),
@@ -326,7 +351,7 @@ namespace BuildScope.Views
                 panel.Children.Add(new TextBlock
                 {
                     Text = $"\u00A7 {reference.Section} - {reference.Title}",
-                    Foreground = new SolidColorBrush(Color.FromRgb(0xD4, 0x94, 0x4C)),
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x2B, 0x4D, 0x3F)),
                     FontSize = 11.5,
                     FontFamily = new FontFamily("Segoe UI"),
                     Margin = new Thickness(4, 1, 0, 1)
