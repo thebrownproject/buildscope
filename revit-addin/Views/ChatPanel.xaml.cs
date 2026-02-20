@@ -5,7 +5,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace BuildScope.Views
+namespace BuildSpec.Views
 {
     public class ChatMessageTemplateSelector : DataTemplateSelector
     {
@@ -222,7 +222,7 @@ namespace BuildScope.Views
                     return;
                 }
 
-                var service = new BuildScopeService(url, key);
+                var service = new BuildSpecService(url, key);
                 var history = _sessionManager.GetHistoryForApi(_messages.ToList());
 
                 var response = await Task.Run(() =>

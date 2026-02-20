@@ -1,4 +1,4 @@
-<UserControl x:Class="BuildScope.Views.ChatPanel"
+<UserControl x:Class="BuildSpec.Views.ChatPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="#F5F1EB">
@@ -135,7 +135,7 @@
                     </Border>
 
                     <!-- Bold heading -->
-                    <TextBlock Text="BuildScope" Foreground="#1A1A1A" FontSize="28" FontWeight="Bold"
+                    <TextBlock Text="BuildSpec" Foreground="#1A1A1A" FontSize="28" FontWeight="Bold"
                                HorizontalAlignment="Center" Margin="0,0,0,6"
                                FontFamily="Segoe UI" />
                     <TextBlock Text="NCC compliance, right in Revit."
@@ -205,7 +205,7 @@
                     </Border>
                     <TextBlock Text="Build" Foreground="#1A1A1A" FontSize="15" FontWeight="Bold"
                                VerticalAlignment="Center" FontFamily="Segoe UI" />
-                    <TextBlock Text="Scope" Foreground="#2B4D3F" FontSize="15" FontWeight="Normal"
+                    <TextBlock Text="Spec" Foreground="#2B4D3F" FontSize="15" FontWeight="Normal"
                                VerticalAlignment="Center" FontFamily="Segoe UI" />
                 </StackPanel>
                 <Button x:Name="SettingsButton" Click="Settings_Click"

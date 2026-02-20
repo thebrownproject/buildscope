@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace BuildScope
+namespace BuildSpec
 {
     public enum SegmentType { Normal, Bold }
     public enum LineType { Paragraph, Bullet, Header }

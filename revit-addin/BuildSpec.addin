@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>BuildSpec</Name>
+    <Assembly>BuildSpec.dll</Assembly>
+    <FullClassName>BuildSpec.App</FullClassName>
+    <AddInId>7F3A9D1E-4B2C-5E8F-A6D0-3C9E7B1F4A2D</AddInId>
+    <VendorId>BuildSpec</VendorId>
+    <VendorDescription>BuildSpec - AI-powered NCC compliance assistant for Revit</VendorDescription>
+  </AddIn>
+</RevitAddIns>

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Newtonsoft.Json;
 
-namespace BuildScope
+namespace BuildSpec
 {
     public enum MessageType
     {

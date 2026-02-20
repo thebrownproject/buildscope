@@ -2,9 +2,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace BuildScope.Tests;
+namespace BuildSpec.Tests;
 
-public class BuildScopeServiceTests
+public class BuildSpecServiceTests
 {
     [Fact]
     public void BuildRequestBody_MatchesEdgeFunctionContract()
@@ -23,7 +23,7 @@ public class BuildScopeServiceTests
             new() { Content = "", Type = MessageType.Loading } // should be filtered out
         };
 
-        var json = BuildScopeService.BuildRequestJson("egress requirements?", project, history);
+        var json = BuildSpecService.BuildRequestJson("egress requirements?", project, history);
         var obj = JObject.Parse(json);
 
         Assert.Equal("egress requirements?", obj["question"]?.ToString());
@@ -52,7 +52,7 @@ public class BuildScopeServiceTests
             ConstructionType = "Type B"
         };
 
-        var json = BuildScopeService.BuildRequestJson("question?", project, null);
+        var json = BuildSpecService.BuildRequestJson("question?", project, null);
         var obj = JObject.Parse(json);
 
         Assert.Null(obj["chat_history"]);
@@ -71,7 +71,7 @@ public class BuildScopeServiceTests
         }
         """;
 
-        var result = BuildScopeService.ParseResponse(responseJson);
+        var result = BuildSpecService.ParseResponse(responseJson);
 
         Assert.Equal("The egress requirements state that...", result.Answer);
         Assert.Equal(2, result.References.Count);
@@ -91,7 +91,7 @@ public class BuildScopeServiceTests
         }
         """;
 
-        var result = BuildScopeService.ParseResponse(responseJson);
+        var result = BuildSpecService.ParseResponse(responseJson);
 
         Assert.Equal("No relevant NCC sections found.", result.Answer);
         Assert.Empty(result.References);
@@ -101,14 +101,14 @@ public class BuildScopeServiceTests
     public void DeserializeResponse_ThrowsOnInvalidJson()
     {
         Assert.Throws<JsonReaderException>(() =>
-            BuildScopeService.ParseResponse("not json"));
+            BuildSpecService.ParseResponse("not json"));
     }
 
     [Fact]
     public void ParseErrorResponse_ExtractsErrorMessage()
     {
         var errorJson = """{"error": "Missing required field: question"}""";
-        var message = BuildScopeService.ParseErrorMessage(errorJson);
+        var message = BuildSpecService.ParseErrorMessage(errorJson);
         Assert.Equal("Missing required field: question", message);
     }
 
@@ -116,7 +116,7 @@ public class BuildScopeServiceTests
     public void ParseErrorResponse_FallsBackToRawBody()
     {
         var rawBody = "Internal Server Error";
-        var message = BuildScopeService.ParseErrorMessage(rawBody);
+        var message = BuildSpecService.ParseErrorMessage(rawBody);
         Assert.Equal("Internal Server Error", message);
     }
 }

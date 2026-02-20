@@ -1,7 +1,7 @@
 using Autodesk.Revit.UI;
 using System.Windows.Controls;
 
-namespace BuildScope.Views
+namespace BuildSpec.Views
 {
     public partial class MainPanel : Page, IDockablePaneProvider
     {

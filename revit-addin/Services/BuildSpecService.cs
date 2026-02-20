@@ -3,7 +3,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace BuildScope
+namespace BuildSpec
 {
     public class QueryResponse
     {
@@ -14,7 +14,7 @@ namespace BuildScope
         public List<NccReference> References { get; set; } = new();
     }
 
-    public class BuildScopeService
+    public class BuildSpecService
     {
         private static readonly HttpClient _httpClient = new()
         {
@@ -24,7 +24,7 @@ namespace BuildScope
         private readonly string _supabaseUrl;
         private readonly string _apiKey;
 
-        public BuildScopeService(string supabaseUrl, string apiKey)
+        public BuildSpecService(string supabaseUrl, string apiKey)
         {
             _supabaseUrl = supabaseUrl.TrimEnd('/');
             _apiKey = apiKey;

@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace BuildScope
+namespace BuildSpec
 {
     public class ProjectManager
     {
@@ -11,7 +11,7 @@ namespace BuildScope
         public ProjectManager() : this(
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "BuildScope", "Projects"))
+                "BuildSpec", "Projects"))
         { }
 
         public ProjectManager(string projectsDir)

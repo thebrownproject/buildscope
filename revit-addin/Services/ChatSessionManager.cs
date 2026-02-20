@@ -1,4 +1,4 @@
-namespace BuildScope
+namespace BuildSpec
 {
     public class ChatSessionManager
     {

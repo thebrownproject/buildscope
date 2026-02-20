@@ -1,9 +1,9 @@
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using System.Reflection;
-using BuildScope.Views;
+using BuildSpec.Views;
 
-namespace BuildScope
+namespace BuildSpec
 {
     [Transaction(TransactionMode.Manual)]
     public class App : IExternalApplication
@@ -14,9 +14,9 @@ namespace BuildScope
         {
             var paneId = new DockablePaneId(PaneGuid);
             var mainPanel = new MainPanel();
-            application.RegisterDockablePane(paneId, "BuildScope", mainPanel);
+            application.RegisterDockablePane(paneId, "BuildSpec", mainPanel);
 
-            string tabName = "BuildScope";
+            string tabName = "BuildSpec";
             application.CreateRibbonTab(tabName);
 
             var panel = application.CreateRibbonPanel(tabName, "Commands");
@@ -25,9 +25,9 @@ namespace BuildScope
                 "ShowChatPanel",
                 "Chat\nPanel",
                 Assembly.GetExecutingAssembly().Location,
-                "BuildScope.ShowChatPanelCommand"
+                "BuildSpec.ShowChatPanelCommand"
             );
-            buttonData.ToolTip = "Toggle the BuildScope compliance panel";
+            buttonData.ToolTip = "Toggle the BuildSpec compliance panel";
 
             panel.AddItem(buttonData);
 

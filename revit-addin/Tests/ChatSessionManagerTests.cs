@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace BuildScope.Tests;
+namespace BuildSpec.Tests;
 
 public class ChatSessionManagerTests
 {

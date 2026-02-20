@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace BuildScope
+namespace BuildSpec
 {
     public class ProjectContext
     {

@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace BuildScope.Tests;
+namespace BuildSpec.Tests;
 
 public class ProjectManagerTests : IDisposable
 {
@@ -9,7 +9,7 @@ public class ProjectManagerTests : IDisposable
 
     public ProjectManagerTests()
     {
-        _testDir = Path.Combine(Path.GetTempPath(), "buildscope-test-" + Guid.NewGuid().ToString("N"));
+        _testDir = Path.Combine(Path.GetTempPath(), "buildspec-test-" + Guid.NewGuid().ToString("N"));
         _manager = new ProjectManager(_testDir);
     }
 

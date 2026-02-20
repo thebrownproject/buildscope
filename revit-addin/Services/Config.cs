@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 
-namespace BuildScope
+namespace BuildSpec
 {
     public static class Config
     {
@@ -18,7 +18,7 @@ namespace BuildScope
             if (_supabaseUrl != null)
                 return _supabaseUrl;
 
-            var envUrl = Environment.GetEnvironmentVariable("BUILDSCOPE_SUPABASE_URL");
+            var envUrl = Environment.GetEnvironmentVariable("BUILDSPEC_SUPABASE_URL");
             if (!string.IsNullOrEmpty(envUrl))
             {
                 _supabaseUrl = envUrl;
@@ -34,7 +34,7 @@ namespace BuildScope
             if (_apiKey != null)
                 return _apiKey;
 
-            var envKey = Environment.GetEnvironmentVariable("BUILDSCOPE_API_KEY");
+            var envKey = Environment.GetEnvironmentVariable("BUILDSPEC_API_KEY");
             if (!string.IsNullOrEmpty(envKey))
             {
                 _apiKey = envKey;

@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BuildScope.Views
+namespace BuildSpec.Views
 {
     public partial class ProjectForm : UserControl
     {
